@@ -2,7 +2,7 @@
 
 * S (Single Responsibility)
     - Single classed for single responsibilities
-        ```
+        ```js
         class InvoiceItem {
             constructor(public price: number, public quantity: number) {}
             getTotal(): number {
@@ -26,7 +26,7 @@
         ```
 * O (Open for extension and closed for modification)
     - child classes can extend base parent class instead of changing parent class structure
-        ```
+        ```js
         interface Shape {
             area(): number;
         }
