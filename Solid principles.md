@@ -26,6 +26,26 @@
         ```
 * O (Open for extension and closed for modification)
     - child classes can extend base parent class instead of changing parent class structure
+        ```
+        interface Shape {
+            area(): number;
+        }
+
+        class Rectangle implements Shape {
+            constructor(public width: number, public height: number) {}
+            area(): number {
+                return this.width * this.height;
+            }
+        }
+
+        // New shapes can be added without changing totalArea
+        class Triangle implements Shape {
+            constructor(public base: number, public height: number) {}
+            area(): number {
+                return 0.5 * this.base * this.height;
+            }
+        }
+        ```
 * L (Liscov substitution)
     - a child class should extend the parent class capability not narrow it down or change
     - if something is working with parent object it should always work with child's object too if substituted.
