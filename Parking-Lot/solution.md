@@ -1,6 +1,6 @@
                           ┌─────────────────────┐
                           │     VehicleType     │
-                          │  {BIKE, CAR}        │
+                          │ {BIKE, CAR, TRUCK}  │
                           └─────────▲───────────┘
                                     │
                                     │ has-a
@@ -12,70 +12,54 @@
 
 
                           ┌─────────────────────┐
-                          │      SpotType       │
-                          │  {BIKE, CAR}        │
+                          │     ParkingSpot     │
+                          │ - spotId            │
+                          │ - vehicleType: VT   │
+                          │ - isFree            │
+                          │ - assignedVehicle?  │─── has-a ───► Vehicle
+                          │ - distanceByGate{}  │  entryGateId -> distance
+                          │ + distanceFromGate()│
+                          │ + assignVehicle()   │
+                          │ + removeVehicle()   │
                           └─────────▲───────────┘
                                     │
-                                    │ has-a
-                          ┌─────────┴───────────┐
-        is-a              │    ParkingSpot      │  <<abstract>>
-  ┌───────────────────────┤ - spotId            │
-  │                       │ - spotType: ST      │
-  │                       │ - isFree            │
-  │                       │ - assignedVehicle?  │─── has-a ───► Vehicle
-  │                       │ + assignVehicle()   │
-  │                       │ + removeVehicle()   │
-  │                       └─────────▲───────────┘
-  │                                 │
-  │              ┌──────────────────┼─────────────────┐
-  │              │                  │                 │
-  │   is-a       │                  │ is-a            │
-  │              │                  │                 │
-┌─┴─────────┐    │              ┌───┴────────┐        │
-│  CarSpot  │    │              │  BikeSpot │         │
-└───────────┘    │              └───────────┘         │
-(spotType=CAR)   │              (spotType=BIKE)       │
-                 │                                    │
-                 └─────────────────────────────────── ┘
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    │               │               │
+                ┌───┴──────┐   ┌────┴─────┐   ┌─────┴─────┐
+                │ CarSpot  │   │ BikeSpot │   │ TruckSpot │
+                └──────────┘   └──────────┘   └───────────┘
 
 
-┌───────────────────────┐
-│        Ticket         │
-│ - ticketId            │
-│ - entryTime           │
-│ - vehicle             │─── has-a ───► Vehicle
-│ - spotId              │
-└───────────────────────┘
+┌──────────────────────────────┐
+│            Ticket            │
+│ - ticketId                   │
+│ - entryTime                  │
+│ - vehicleNumber              │
+│ - spotId                     │
+│ - entryGateId                │
+└──────────────────────────────┘
 
 
 ┌───────────────────────────┐
-│       SpotManager         │
-│ - spots: Map<id, Spot>    │─── has-a ───► ParkingSpot[*]
+│        SpotManager        │
+│ - spots: ParkingSpot[]    │─── has-a ───► ParkingSpot[*]
 │ + addSpot()               │
 │ + getSpot()               │
 │ + releaseSpot()           │
-│ + getAvailableSpotByType()│
-│ + assignVehicleToSpot()   │
+│ + nearestFree(type, gate) │  choose by min distanceFromGate
 └───────────▲────────────────┘
             │ has-a
 ┌───────────┴──────────────┐
-│       ParkingLot         │
+│        ParkingLot        │
 │ - ticketsById            │─── has-a ───► Ticket[*]
-│ - activeTicketByVehicle  │
+│ - activeByVehicle        │  vehicleNumber -> ticketId
 │ - spots: SpotManager     │
-│ - pricing: Strategy      │─── has-a ───► PricingStrategy
-│ + issueTicket()          │
-│ + exit()                 │
-└───────────▲──────────────┘
-            │
-            │ uses
-┌───────────┴──────────────┐
-│   PricingStrategy (IF)   │  <<interface>>
-│ + calculateFee()         │
-└───────────▲──────────────┘
-            │ is-a
-┌───────────┴──────────────┐
-│   SimpleHourlyPricing    │
-│ - ratePerHourCar         │
-│ - ratePerHourBike        │
+│ + issueTicket(v, gateId) │
+│ + exit(vehicleNo, gateId)│
 └──────────────────────────┘
+
+Notes:
+- Simple MVP: no interfaces or pricing strategies.
+- Fees computed internally using a flat hourly rate per VehicleType.
+

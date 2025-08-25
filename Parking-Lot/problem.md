@@ -5,9 +5,8 @@
 * There are different parking spot types (bike, car, truck).
 * When a vehicle enters:
     - It gets a ticket.
-    - A parking spot is allocated.
+    - Allocate the nearest available spot of the correct type.
 
 * When a vehicle exits:
-    - The ticket is scanned.
-    - The fee is calculated and paid.
+    - Compute fee on exit using simple hourly pricing.
     - The spot is freed.
