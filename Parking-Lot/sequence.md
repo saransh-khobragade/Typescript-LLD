@@ -10,10 +10,10 @@ Client         ParkingLot         SpotManager           ParkingSpot         Tick
   |                |<-------------- ticket ----------------|                 |
   |<----------- ticket ------------------------------------|                 |
 
-## Sequence: exit(vehicleNumber, exitGateId)
+## Sequence: exit(ticketId, exitGateId)
 Client         ParkingLot         SpotManager          ParkingSpot
   |                |                   |                   |
-  |--exit(vehNo, gateId)              |                   |
+  |--exit(ticketId, gateId)           |                   |
   |                |-- getSpot(spotId) ------------------->|
   |                |                   |---- spot ---------|
   |                |-- computeFee(entry, now, type)        |

@@ -1,65 +1,64 @@
-                          ┌─────────────────────┐
-                          │     VehicleType     │
-                          │ {BIKE, CAR, TRUCK}  │
-                          └─────────▲───────────┘
-                                    │
-                                    │ has-a
-                          ┌─────────┴───────────┐
-                          │      Vehicle        │
-                          │ - vehicleNumber     │
-                          │ - vehicleType: VT   │
-                          └─────────────────────┘
+                         +------------------+
+                         |   VehicleType    |
+                         | {BIKE,CAR,TRUCK} |
+                         +------------------+
 
++-------------------+                 +----------------------------+
+|      Vehicle      |                 |         Ticket             |
++-------------------+                 +----------------------------+
+| - vehicleNumber   |                 | - ticketId: string         |
+| - vehicleType: VT |                 | - entryTime: Date          |
++-------------------+                 | - vehicleNumber: string    |
+                                      | - spotId: string           |
+                                      | - entryGateId: string      |
+                                      +----------------------------+
 
-                          ┌─────────────────────┐
-                          │     ParkingSpot     │
-                          │ - spotId            │
-                          │ - vehicleType: VT   │
-                          │ - isFree            │
-                          │ - assignedVehicle?  │─── has-a ───► Vehicle
-                          │ - distanceByGate{}  │  entryGateId -> distance
-                          │ + distanceFromGate()│
-                          │ + assignVehicle()   │
-                          │ + removeVehicle()   │
-                          └─────────▲───────────┘
-                                    │
-                    ┌───────────────┼───────────────┐
-                    │               │               │
-                    │               │               │
-                ┌───┴──────┐   ┌────┴─────┐   ┌─────┴─────┐
-                │ CarSpot  │   │ BikeSpot │   │ TruckSpot │
-                └──────────┘   └──────────┘   └───────────┘
+                         is-a
+     +---------------------^---------------------+
+     |                                           |
++------------+      +------------+        +-------------+
+|  CarSpot   |      |  BikeSpot  |        |  TruckSpot  |
++------------+      +------------+        +-------------+
+      is-a                 is-a                  is-a
+          \                 |                    /
+           \                |                   /
+            \               |                  /
+             v              v                 v
+                +----------------------------+
+                |        ParkingSpot         |
+                +----------------------------+
+                | - spotId: string           |
+                | - vehicleType: VT          |
+                | - isFree: boolean          |
+                | - assignedVehicle?:Vehicle |
+                | - distanceByGate: {gateId->d}
+                +----------------------------+
+                | + distanceFromGate(gateId) |
+                | + assignVehicle(v)         |
+                | + removeVehicle()          |
+                +----------------------------+
 
++----------------------------+          has-a (manages many)
+|        SpotManager         |------------------------------------+
++----------------------------+                                    |
+| - spots: ParkingSpot[]     |                                    |
++----------------------------+                                    |
+| + addSpot(spot)            |                                    |
+| + getSpot(id)              |                                    |
+| + releaseSpot(id)          |                                    |
+| + nearestFree(type, gate)  |<--- uses ParkingSpot.distanceFromGate
++----------------------------+
 
-┌──────────────────────────────┐
-│            Ticket            │
-│ - ticketId                   │
-│ - entryTime                  │
-│ - vehicleNumber              │
-│ - spotId                     │
-│ - entryGateId                │
-└──────────────────────────────┘
-
-
-┌───────────────────────────┐
-│        SpotManager        │
-│ - spots: ParkingSpot[]    │─── has-a ───► ParkingSpot[*]
-│ + addSpot()               │
-│ + getSpot()               │
-│ + releaseSpot()           │
-│ + nearestFree(type, gate) │  choose by min distanceFromGate
-└───────────▲────────────────┘
-            │ has-a
-┌───────────┴──────────────┐
-│        ParkingLot        │
-│ - ticketsById            │─── has-a ───► Ticket[*]
-│ - activeByVehicle        │  vehicleNumber -> ticketId
-│ - spots: SpotManager     │
-│ + issueTicket(v, gateId) │
-│ + exit(vehicleNo, gateId)│
-└──────────────────────────┘
-
-Notes:
-- Simple MVP: no interfaces or pricing strategies.
-- Fees computed internally using a flat hourly rate per VehicleType.
-
+                 has-a (uses)
++----------------------------+
+|        ParkingLot          |
++----------------------------+
+| - ticketsById: Map         |
+| - spots: SpotManager       |
+| - now(): Date              |
+| - makeId(): string         |
++----------------------------+
+| + issueTicket(vehicle,     |
+|               entryGateId) |
+| + exit(ticketId, exitGate) |
++----------------------------+
