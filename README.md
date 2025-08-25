@@ -1,6 +1,6 @@
 ## Low level designs in typescript
 
-* [Parking-Lot](Parking-Lot/index.ts)
+* [Parking-Lot](Parking-Lot)
 
 ### Test file using npx 
 ```js
