@@ -1,0 +1,1 @@
+![Parking Lot Diagram](Parking-Lot/parking-lot.png)
