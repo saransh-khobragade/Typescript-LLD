@@ -2,6 +2,7 @@ enum STATUS {
     "REQUESTED",
     "ACCEPTED",
 }
+// SRP: Single responsibility - manages ride state and information
 class Ride {
     private rideId: string;
     private riderId: string;

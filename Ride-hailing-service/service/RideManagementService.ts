@@ -5,6 +5,7 @@ import Driver from "../model/user/Driver";
 import DriverAssignmnetService from "./DriverAssignmnetService";
 import PaymentService from "./PaymentService";
 
+// SRP Violation: Multiple responsibilities - ride creation, fare calculation, payment processing
 class RideManagementService {
     private driverAssignmnetService: DriverAssignmnetService;
     private paymentService: PaymentService;

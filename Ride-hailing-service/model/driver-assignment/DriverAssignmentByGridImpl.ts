@@ -1,6 +1,7 @@
 import Driver from "../user/Driver";
 import DriverAssignment from "./DriverAssignment";
 
+// Strategy Pattern: Concrete implementation of driver assignment strategy
 class DriverAssignmentByGridImpl implements DriverAssignment {
     findNearestDriver(pickupLocation: string): Driver {
         //returning nearest driver

@@ -1,6 +1,7 @@
 import PaymentGateway from "../model/payment/PaymentGateway";
 import UpiGatewayImpl from "../model/payment/UpiGatewayImpl";
 
+// SRP: Single responsibility - handles payment processing operations
 class PaymentService {
     getPaymentGateway(paymentType: string): PaymentGateway {
         switch (paymentType) {

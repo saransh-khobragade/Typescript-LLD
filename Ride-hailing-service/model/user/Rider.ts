@@ -1,5 +1,6 @@
 import User from "./User";
 
+// LSP: Rider extends User without breaking parent behavior
 class Rider extends User {
     private paymentOption: string;
     constructor(

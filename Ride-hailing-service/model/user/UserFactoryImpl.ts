@@ -4,7 +4,7 @@ import Driver from "./Driver";
 
 import UserFactory from "./UserFactory";
 
-//Factory pattern
+// Factory Pattern: Creates different user types based on input
 class UserFactoryImpl implements UserFactory {
     createUser(userType: string): User | null {
         if (userType === "rider") {

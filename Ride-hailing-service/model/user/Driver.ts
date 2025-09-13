@@ -1,5 +1,6 @@
 import User from "./User";
 
+// LSP: Driver extends User without breaking parent behavior
 class Driver extends User {
     private drivingLicense: string;
     private vehicleInfo: string;

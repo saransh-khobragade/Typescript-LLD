@@ -1,3 +1,4 @@
+// SRP: Single responsibility - manages user basic information
 class User {
     private id: string;
     private name: string;
