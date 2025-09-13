@@ -2,7 +2,8 @@ import Vehicle, { VehicleType } from "../model/Vehicle";
 import SpotManager from "./SpotManagerService";
 import Ticket from "../model/Ticket";
 
-class ParkingLot {
+// SRP: Single responsibility - manages parking lot operations (entry/exit/ticketing)
+class ParkingLotService {
     private ticketsById = new Map<string, Ticket>();
     // -- Pricing (simple hourly) --
     private RATE_PER_HOUR: Record<VehicleType, number> = {
@@ -11,18 +12,11 @@ class ParkingLot {
         [VehicleType.TRUCK]: 100,
     };
 
-    computeFee(entry: Date, exit: Date, vType: VehicleType): number {
-        const ms = Math.max(0, exit.getTime() - entry.getTime());
-        const hours = Math.ceil(ms / (1000 * 60 * 60));
-        const rate = this.RATE_PER_HOUR[vType];
-        return Math.max(rate, hours * rate); // minimum 1 hour
+    constructor(private spots: SpotManager) {} // DIP: Dependency Inversion - depends on SpotManager abstraction, not concrete implementation
+
+    makeId(): string {
+        return `T-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     }
-    constructor(
-        private spots: SpotManager,
-        private now: () => Date = () => new Date(),
-        private makeId: () => string = () =>
-            `T-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
-    ) {}
 
     issueTicket(vehicle: Vehicle, entryGateId: string): Ticket {
         // check if vehicle already parked (scan tickets)
@@ -43,13 +37,21 @@ class ParkingLot {
         spot.assignVehicle(vehicle);
         const t = new Ticket(
             this.makeId(),
-            this.now(),
+            new Date(),
             vehicle.vehicleNumber,
             spot.spotId,
             entryGateId
         );
         this.ticketsById.set(t.ticketId, t);
         return t;
+    }
+
+    computeFee(entry: Date, exit: Date, vType: VehicleType): number {
+        const ms = Math.max(0, exit.getTime() - entry.getTime());
+        const hours = Math.ceil(ms / (1000 * 60 * 60));
+        const rate = this.RATE_PER_HOUR[vType];
+        // Strategy Pattern: Different pricing strategies based on vehicle type
+        return Math.max(rate, hours * rate); // minimum 1 hour
     }
 
     exit(
@@ -62,7 +64,7 @@ class ParkingLot {
         const spot = this.spots.getSpot(ticket.spotId);
         if (!spot) throw new Error(`Spot ${ticket.spotId} not found`);
 
-        const exitTime = this.now();
+        const exitTime = new Date();
         const fee = this.computeFee(
             ticket.entryTime,
             exitTime,
@@ -75,4 +77,4 @@ class ParkingLot {
     }
 }
 
-export default ParkingLot;
+export default ParkingLotService;

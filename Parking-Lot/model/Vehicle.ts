@@ -3,6 +3,7 @@ export enum VehicleType {
     CAR = "CAR",
     TRUCK = "TRUCK",
 }
+// SRP: Single responsibility - represents vehicle entity with type and identification
 class Vehicle {
     constructor(
         public vehicleNumber: string,

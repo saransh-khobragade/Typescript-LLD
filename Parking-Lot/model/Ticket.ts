@@ -1,3 +1,4 @@
+// SRP: Single responsibility - represents parking ticket with entry details
 class Ticket {
     constructor(
         public ticketId: string,

@@ -1,5 +1,6 @@
 import Vehicle, { VehicleType } from "../Vehicle";
 
+// SRP: Single responsibility - manages individual parking spot state and operations
 class Spot {
     public isFree = true;
     public assignedVehicle: Vehicle | null = null;
@@ -22,6 +23,7 @@ class Spot {
                 `Vehicle ${vehicle.vehicleType} not allowed on ${this.vehicleType} spot`
             );
         }
+        // Template Method Pattern: Common assignment logic with type-specific validation
         this.assignedVehicle = vehicle;
         this.isFree = false;
     }

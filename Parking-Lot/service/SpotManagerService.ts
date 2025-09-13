@@ -1,7 +1,8 @@
 import Spot from "../model/Spot/Spot";
 import { VehicleType } from "../model/Vehicle";
 
-class SpotManager {
+// SRP: Single responsibility - manages collection of parking spots and spot allocation logic
+class SpotManagerService {
     private spots: Spot[] = [];
 
     addSpot(spot: Spot): void {
@@ -30,7 +31,8 @@ class SpotManager {
                 bestDist = d;
             }
         }
+        // Strategy Pattern: Algorithm for finding nearest available spot based on distance
         return best;
     }
 }
-export default SpotManager;
+export default SpotManagerService;
