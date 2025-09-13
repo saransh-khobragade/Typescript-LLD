@@ -5,4 +5,3 @@
 4.⁠ ⁠System should be able to handle the payments done using upi, credit card etc
 5.⁠ ⁠After the ride is completed, driver and rider can rate each other and may be basic questionnaire that till build the rating for that individual
 
-
