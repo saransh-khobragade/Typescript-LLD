@@ -1,6 +1,6 @@
 import Vehicle, { VehicleType } from "../model/Vehicle";
-import SpotManager from "./SpotManager";
-import Ticket from "./Ticket";
+import SpotManager from "./SpotManagerService";
+import Ticket from "../model/Ticket";
 
 class ParkingLot {
     private ticketsById = new Map<string, Ticket>();

@@ -1,4 +1,4 @@
-import Spot from "./Spot/Spot";
+import Spot from "../model/Spot/Spot";
 import { VehicleType } from "../model/Vehicle";
 
 class SpotManager {

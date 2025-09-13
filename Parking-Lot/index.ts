@@ -1,8 +1,8 @@
-import SpotManager from "./model/SpotManager";
+import SpotManager from "./service/SpotManagerService";
 import CarSpot from "./model/Spot/CarSpot";
 import BikeSpot from "./model/Spot/BikeSpot";
 import TruckSpot from "./model/Spot/TruckSpot";
-import ParkingLot from "./model/ParkingLot";
+import ParkingLot from "./service/ParkingLotService";
 import Vehicle, { VehicleType } from "./model/Vehicle";
 
 const m = new SpotManager();
