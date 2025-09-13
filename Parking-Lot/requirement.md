@@ -8,10 +8,6 @@
 * When a vehicle enters:
     - It gets a ticket.
     - Allocate the nearest available spot of the correct type.
-
 * When a vehicle exits:
     - Compute fee on exit using simple hourly pricing.
     - The spot is freed.
-
-## LLD
-![Parking Lot Diagram](parking-lot.png)
