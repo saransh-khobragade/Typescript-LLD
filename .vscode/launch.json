@@ -4,18 +4,31 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
-            "type": "node",
+            "type": "java",
+            "name": "Main",
             "request": "launch",
-            "name": "Launch Program",
+            "mainClass": "Main",
+            "projectName": "05-Low-Level-Designs_fd5aa8e5"
+        },
+        {
+            "type": "java",
+            "name": "Java",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "name": "Typescript",
+            "program": "${file}",
+            "request": "launch",
+            "runtimeArgs": [
+                "tsx"
+            ],
+            "runtimeExecutable": "npx",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/Parking-Lot/index.ts",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "type": "node"
         }
     ]
 }
