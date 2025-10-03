@@ -34,6 +34,7 @@ class CollectMoneyState implements MachineState {
         this.coin += coin;
     }
     insert(machine: VendingMachine, coin: number) {
+        machine.currentBalance += coin;
         machine.currentState = new CollectMoneyState(coin);
     }
     select(machine: VendingMachine, itemName: string) {
