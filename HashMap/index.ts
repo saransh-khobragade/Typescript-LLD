@@ -11,7 +11,7 @@ class Item {
 class HashMap {
     size = 0;
     capacity = 2;
-    bucket: Item[];
+    bucket: Item[] | null[];
 
     constructor() {
         this.bucket = new Array(this.capacity).fill(null);
@@ -49,7 +49,7 @@ class HashMap {
         const oldBucket = this.bucket;
         this.bucket = new Array(this.capacity).fill(null);
         this.size = 0;
-        let head = null;
+
         for (let head of oldBucket) {
             while (head) {
                 this.put(head.key, head.value);
@@ -65,3 +65,4 @@ hmap.put("b", 2);
 hmap.put("c", 3);
 hmap.put("d", 3);
 hmap.put("e", 3);
+console.log(hmap.bucket);
