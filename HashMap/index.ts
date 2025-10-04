@@ -2,7 +2,7 @@ class Item {
     key: string;
     value: any;
     next: Item | null;
-    constructor(key: string, value: any, next = null) {
+    constructor(key: string, value: any, next: Item | null) {
         this.key = key;
         this.value = value;
         this.next = next;
@@ -26,22 +26,62 @@ class HashMap {
     }
     put(key: string, value: any) {
         const hashKey = this.getHash(key);
+        let head = this.bucket[hashKey];
 
-        if (hashKey < this.capacity) {
-            let head = this.bucket[hashKey];
-            if (head) {
-                while (head.next != null) {
-                    head = head.next;
-                }
-                head.next = new Item(key, value);
-            } else {
-                this.bucket[hashKey] = new Item(key, value);
-                this.size += 1;
+        //checking if already key present so replacing value
+        let curr = head;
+        while (curr) {
+            if (curr.key === key) {
+                curr.value = value;
+                return;
             }
+            curr = curr.next;
         }
+
+        //1.if hash present but key is different,(add new node at first,shifting head as next)
+        //2.new key new hash,(head will be null)
+        this.bucket[hashKey] = new Item(key, value, head);
+        this.size += 1;
 
         if (this.size / this.capacity >= 0.75) {
             this.resize();
+        }
+    }
+    has(key: string) {
+        if (this.get(key) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    get(key: string) {
+        const hashKey = this.getHash(key);
+        let head = this.bucket[hashKey];
+        if (head) {
+            while (head) {
+                if (head.key === key) {
+                    return head;
+                }
+                head = head.next;
+            }
+        }
+        return null;
+    }
+    delete(key: string) {
+        const hashKey = this.getHash(key);
+        let head = this.bucket[hashKey];
+
+        if (head?.key == key) {
+            this.bucket[hashKey] = null;
+            this.size -= 1;
+        }
+        while (head) {
+            if (head.key == key) {
+                head = head.next;
+                this.size -= 1;
+                return;
+            }
+            head = head.next;
         }
     }
     resize() {
@@ -61,8 +101,11 @@ class HashMap {
 
 const hmap = new HashMap();
 hmap.put("a", 1);
-hmap.put("b", 2);
+hmap.put("a", 2);
 hmap.put("c", 3);
 hmap.put("d", 3);
 hmap.put("e", 3);
-console.log(hmap.bucket);
+console.log(hmap.get("e")); //Item {key: 'e', value: 3, next: null}
+console.log(hmap.has("e")); //true
+hmap.delete("e");
+console.log(hmap.has("e")); //false
